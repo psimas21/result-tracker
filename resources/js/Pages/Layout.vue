@@ -1,4 +1,12 @@
 <template>
+  <!--
+    This example requires updating your template:
+
+    ```
+    <html class="h-full bg-gray-100">
+    <body class="h-full">
+    ```
+  -->
   <div>
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog as="div" class="relative z-40 md:hidden" @close="sidebarOpen = false">
@@ -22,10 +30,10 @@
               </div>
               <div class="mt-5 flex-1 h-0 overflow-y-auto">
                 <nav class="px-2 space-y-1">
-                  <button v-for="item in navigation" :key="item.name" :class="[indexMenu ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']" @click="goToPage(item.to)">
-                    <component :is="item.icon" :class="[indexMenu ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
+                  <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">
+                    <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-4 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
                     {{ item.name }}
-                  </button>
+                  </a>
                 </nav>
               </div>
             </DialogPanel>
@@ -46,114 +54,114 @@
         </div>
         <div class="flex-1 flex flex-col overflow-y-auto">
           <nav class="flex-1 px-2 py-4 space-y-1">
-            <router-link v-for="item in navigation" :key="item.name" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']" @click="goToPage(item.to)">
+            <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">
               <component :is="item.icon" :class="[item.current ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
               {{ item.name }}
-            </router-link>
+            </a>
           </nav>
         </div>
       </div>
     </div>
     <div class="md:pl-64 flex flex-col">
       <div class="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
-        <button type="button" class="px-4 border-r border-gray-200 text-gray-500 md:hidden" @click="sidebarOpen = true">
+        <button type="button" class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden" @click="sidebarOpen = true">
           <span class="sr-only">Open sidebar</span>
           <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
         </button>
         <div class="flex-1 px-4 flex justify-between">
           <div class="flex-1 flex">
-
+            <form class="w-full flex md:ml-0" action="#" method="GET">
+              <label for="search-field" class="sr-only">Search</label>
+              <div class="relative w-full text-gray-400 focus-within:text-gray-600">
+                <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+                  <SearchIcon class="h-5 w-5" aria-hidden="true" />
+                </div>
+                <input id="search-field" class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm" placeholder="Search" type="search" name="search" />
+              </div>
+            </form>
           </div>
           <div class="ml-4 flex items-center md:ml-6">
-            <strong>Sulaiman Idris</strong>
+            <button type="button" class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <span class="sr-only">View notifications</span>
+              <BellIcon class="h-6 w-6" aria-hidden="true" />
+            </button>
+
+            <!-- Profile dropdown -->
+            <Menu as="div" class="ml-3 relative">
+              <div>
+                <MenuButton class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  <span class="sr-only">Open user menu</span>
+                  <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                </MenuButton>
+              </div>
+              <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
+                    <a :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
+                  </MenuItem>
+                </MenuItems>
+              </transition>
+            </Menu>
           </div>
         </div>
       </div>
-      <!-- REPLACE THE CONTENT -->
-      <slot />
-      <!-- END REPLACE THE CONTENT -->
+
+      <main class="flex-1">
+        <div class="py-6">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+          </div>
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <!-- Replace with your content -->
+            <div class="py-4">
+              <div class="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+            </div>
+            <!-- /End replace -->
+          </div>
+        </div>
+      </main>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { Dialog, DialogPanel, Menu, MenuButton, MenuItem, MenuItems, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { BellIcon, CalendarIcon, ChartBarIcon, FolderIcon, HomeIcon, InboxIcon, MenuAlt2Icon, UsersIcon, XIcon } from '@heroicons/vue/outline'
+import {
+  Dialog,
+  DialogPanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  TransitionChild,
+  TransitionRoot,
+} from '@headlessui/vue'
+import {
+  BellIcon,
+  CalendarIcon,
+  ChartBarIcon,
+  FolderIcon,
+  HomeIcon,
+  InboxIcon,
+  MenuAlt2Icon,
+  UsersIcon,
+  XIcon,
+} from '@heroicons/vue/outline'
 import { SearchIcon } from '@heroicons/vue/solid'
 
-const sidebarOpen = ref(false)
-</script>
+const navigation = [
+  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
+  { name: 'Team', href: '#', icon: UsersIcon, current: false },
+  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
+  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
+  { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
+]
+const userNavigation = [
+  { name: 'Your Profile', href: '#' },
+  { name: 'Settings', href: '#' },
+  { name: 'Sign out', href: '#' },
+]
 
-<script>
-export default {
-  data() {
-    return {
-      navigation:[
-        { name: 'Dashboard', icon: HomeIcon, to: '', current: false },
-        { name: 'Post', href: '', icon: UsersIcon, to: 'post', current: true },
-        { name: 'Report', icon: FolderIcon, to: 'report', current: false },
-        { name: 'Calendar', icon: CalendarIcon, to: '', current: false },
-        { name: 'Documents', icon: InboxIcon, to: '', current: false },
-        { name: 'Reports', icon: ChartBarIcon, to: '', current: false },
-      ]
-    }
-  },
-  computed: {
-    appName() {
-      // return this.$page.props.appName;
-    },
-    user() {
-      // return this.$page.props.auth.user;
-    },
-    indexMenu() {
-      const inertiaUrl = this.$inertia.page.url.split("?")[0];
-      const index = this.navigation.findIndex((item) => {
-        const windowUrl = this.route(item.to);
-        return windowUrl.includes(inertiaUrl);
-      });
-      return index;
-      // console.log(index)
-    },
-    activeIndex(url) {
-      if (this.$inertia.page.url.split("?")[0].split("/")[1] == url) {
-        return true
-      }
-      else{
-        return false
-      }
-    },
-  },
-  watch: {
-    // $page: {
-    //   handler() {
-    //     const message = this.$page.props.flash.message;
-    //     if (message != null) {
-    //       switch (message.type) {
-    //         case "success":
-    //           // this.$toast.success(message.text);
-    //           this.$Notice.success({title: message.text});
-    //           // this.$Message.success(message.text);
-    //           break;
-    //         case "error":
-    //           // this.$toast.error(message.text);
-    //           this.$Notice.error({title: message.text});
-    //           break;
-    //       }
-    //     }
-    //   },
-    // },
-  },
-  methods:{
-    logout() {
-      this.$inertia.post("/logout");
-    },
-    goToPage(page) {
-      this.$inertia.visit(this.route(page));
-    },
-  },
-  created() {
-    console.log(this.$inertia.page.url.split("?")[0].split("/")[1])
-  },
-}
+const sidebarOpen = ref(false)
 </script>
