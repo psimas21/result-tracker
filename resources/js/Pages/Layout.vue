@@ -124,6 +124,26 @@ export default {
       }
     },
   },
+  watch: {
+    // $page: {
+    //   handler() {
+    //     const message = this.$page.props.flash.message;
+    //     if (message != null) {
+    //       switch (message.type) {
+    //         case "success":
+    //           // this.$toast.success(message.text);
+    //           this.$Notice.success({title: message.text});
+    //           // this.$Message.success(message.text);
+    //           break;
+    //         case "error":
+    //           // this.$toast.error(message.text);
+    //           this.$Notice.error({title: message.text});
+    //           break;
+    //       }
+    //     }
+    //   },
+    // },
+  },
   methods:{
     logout() {
       this.$inertia.post("/logout");
