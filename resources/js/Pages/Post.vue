@@ -13,16 +13,28 @@
                     <div class="sm:flex-auto">
                     </div>
                     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <button type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto" @click="resModal = true">
-                            Result
+                        <button type="button" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none sm:w-auto" @click="resModal = true">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <strong>Result</strong>
                         </button>
                     </div>
                     <!-- MODAL -->
                     <Modal title="Title" v-model="resModal" :closable="false">
-                        <p>Content of dialog</p>
+                        <Form ref="formInline" :model="formInline" :rules="ruleInline">
+                            <FormItem prop="user">
+                                <Input type="text" v-model="formInline.user" placeholder="Username">
+                                </Input>
+                            </FormItem>
+                            <FormItem prop="password">
+                                <Input type="password" v-model="formInline.password" placeholder="Password">
+                                </Input>
+                            </FormItem>
+                        </Form>
                         <template #footer>
                             <Button type="default" size="small" @click="resModal = false">Cancel</Button>
-                            <Button type="success" size="small" @click="del">Post</Button>
+                            <Button type="primary" @click="handleSubmit('formInline')">Post</Button>
                         </template>
                     </Modal>
                     <!-- END MODAL -->
@@ -31,7 +43,7 @@
                     <div class="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
                         <div class="inline-block min-w-full py-2 align-middle">
                         <div class="shadow-sm ring-1 ring-black ring-opacity-5">
-                            <table class="min-w-full border-separate" style="border-spacing: 0">
+                            <table class="min-w-full border-separate" style="border-spacing: 0" v-if="result != 0">
                             <thead class="bg-gray-50">
                                 <tr>
                                 <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Name</th>
@@ -74,13 +86,38 @@ export default {
     components: { Layout },
     data() {
         return {
+        result: 1,
          resModal: false,
             people: [
             { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
             // More people...
-            ]
+            ],
+            formInline: {
+                user: '',
+                password: ''
+            },
+            ruleInline: {
+                user: [
+                    { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: 'Please fill in the password.', trigger: 'blur' },
+                    { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+                ]
+            }
         }
     },
+    methods: {
+        handleSubmit(name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.$Message.success('Success!');
+                } else {
+                    this.$Message.error('Fail!');
+                }
+            })
+        }
+    }
 
 }
 </script>
