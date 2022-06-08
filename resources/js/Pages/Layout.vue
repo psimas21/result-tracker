@@ -96,3 +96,25 @@ const userNavigation = [
 
 const sidebarOpen = ref(false)
 </script>
+<script>
+export default {
+  watch: {
+    $page: {
+      handler() {
+        const message = this.$page.props.flash.message;
+        if (message != null) {
+          switch (message.type) {
+            case "success":
+              this.$Notice.success({title: message.text});
+              // this.$Message.success(message.text);
+              break;
+            case "error":
+              this.$Notice.error({title: message.text});
+              break;
+          }
+        }
+      },
+    },
+  },
+}
+</script>

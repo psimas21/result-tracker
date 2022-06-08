@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ResultController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,5 +36,7 @@ Route::get('/post', function () {
 Route::get('/report', function () {
     return Inertia::render('Report');
 })->name('report');
+
+Route::resource('post', ResultController::class)->only(['store']);
 
 require __DIR__.'/auth.php';

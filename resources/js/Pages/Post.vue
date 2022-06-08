@@ -21,20 +21,36 @@
                         </button>
                     </div>
                     <!-- MODAL -->
-                    <Modal title="Title" v-model="resModal" :closable="false">
-                        <Form ref="formInline" :model="formInline" :rules="ruleInline">
-                            <FormItem prop="user">
-                                <Input type="text" v-model="formInline.user" placeholder="Username">
+                    <Modal title="Post Result" v-model="resModal" :closable="false" :mask-closable="false">
+                        <Form ref="form" :model="form" :rules="ruleInline">
+                            <FormItem prop="user_id">
+                                <Input type="number" v-model="form.user_id" placeholder="user id">
                                 </Input>
                             </FormItem>
-                            <FormItem prop="password">
-                                <Input type="password" v-model="formInline.password" placeholder="Password">
+                            <FormItem prop="party_id">
+                                <Input type="number" v-model="form.party_id" placeholder="party id">
+                                </Input>
+                            </FormItem>
+                            <FormItem prop="lga_id">
+                                <Input type="number" v-model="form.lga_id" placeholder="lg id">
+                                </Input>
+                            </FormItem>
+                            <FormItem prop="ward_id">
+                                <Input type="number" v-model="form.ward_id" placeholder="ward id">
+                                </Input>
+                            </FormItem>
+                            <FormItem prop="pu_id">
+                                <Input type="text" v-model="form.pu_id" placeholder="pu id">
+                                </Input>
+                            </FormItem>
+                            <FormItem prop="vote_count">
+                                <Input type="number" v-model="form.vote_count" placeholder="vote count">
                                 </Input>
                             </FormItem>
                         </Form>
                         <template #footer>
-                            <Button type="default" size="small" @click="resModal = false">Cancel</Button>
-                            <Button type="primary" @click="handleSubmit('formInline')">Post</Button>
+                            <Button type="default" size="small" @click="closeModal('form')">Cancel</Button>
+                            <Button type="primary" size="small" @click="submit('form')">Post</Button>
                         </template>
                     </Modal>
                     <!-- END MODAL -->
@@ -86,37 +102,98 @@ export default {
     components: { Layout },
     data() {
         return {
-        result: 1,
-         resModal: false,
+            result: 1,
+            resModal: false,
             people: [
             { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
             // More people...
             ],
             formInline: {
-                user: '',
-                password: ''
+                user_id: '',
+                party_id: '',
+                lga_id: '',
+                ward_id: '',
+                pu_id: '',
+                vote_count: ''
             },
             ruleInline: {
-                user: [
-                    { required: true, message: 'Please fill in the user name', trigger: 'blur' }
+                user_id: [
+                    { required: true, message: 'Please fill in the user ID', trigger: 'blur' }
                 ],
-                password: [
-                    { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-                    { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
+                party_id: [
+                    { required: true, message: 'Please fill in the party ID', trigger: 'blur' }
+                ],
+                lg_id: [
+                    { required: true, message: 'Please fill in the lg ID', trigger: 'blur' }
+                ],
+                ward_id: [
+                    { required: true, message: 'Please fill in the ward ID', trigger: 'blur' }
+                ],
+                pu_id: [
+                    { required: true, message: 'Please fill in the pu ID', trigger: 'blur' }
+                ],
+                vote_count: [
+                    { required: true, message: 'Please fill in the vote count', trigger: 'blur' }
                 ]
-            }
+            },
+            itemId: null,
+            form: this.$inertia.form({
+                user_id: null,
+                party_id: null,
+                lga_id: null,
+                ward_id: null,
+                pu_id: null,
+                vote_count: null
+            }),
         }
     },
     methods: {
-        handleSubmit(name) {
+        submit(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.$Message.success('Success!');
-                } else {
+                    // this.$Message.success('Success!');
+                    this.form.post(route("post.store"), {
+                        // preverseScroll: true,
+                        onSuccess: () => {
+                            this.$refs[name].resetFields()
+                            this.resModal = false;
+                            // this.form.reset();
+                        },
+                    });
+                }
+                 else {
                     this.$Message.error('Fail!');
                 }
             })
+        },
+        closeModal(name) {
+            this.$refs[name].resetFields()
+            this.resModal = false
+        },
+        //Perform save and also update action
+        submitData() {
+        if (this.isUpdate) {
+            this.form.put(route("employee.update", this.itemId), {
+            preverseScroll: true,
+            onSuccess: () => {
+                this.isLoading = false;
+                this.dialog = false;
+                this.isUpdate = false;
+                this.itemId = null;
+                this.form.reset();
+            },
+            });
+        } else {
+            this.form.post(route("employee.store"), {
+            preverseScroll: true,
+            onSuccess: () => {
+                this.isLoading = false;
+                this.dialog = false;
+                this.form.reset();
+            },
+            });
         }
+        },
     }
 
 }

@@ -20424,11 +20424,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/BellIcon.js");
 /* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/MenuAlt2Icon.js");
 /* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/XIcon.js");
+var __default__ = {
+  watch: {
+    $page: {
+      handler: function handler() {
+        var message = this.$page.props.flash.message;
+
+        if (message != null) {
+          switch (message.type) {
+            case "success":
+              this.$Notice.success({
+                title: message.text
+              }); // this.$Message.success(message.text);
+
+              break;
+
+            case "error":
+              this.$Notice.error({
+                title: message.text
+              });
+              break;
+          }
+        }
+      }
+    }
+  }
+};
 
 
  // import { SearchIcon } from '@heroicons/vue/solid'
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
   name: 'Layout',
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
@@ -20499,7 +20525,7 @@ __webpack_require__.r(__webpack_exports__);
     });
     return __returned__;
   }
-});
+}));
 
 /***/ }),
 
@@ -20532,39 +20558,107 @@ __webpack_require__.r(__webpack_exports__);
       } // More people...
       ],
       formInline: {
-        user: '',
-        password: ''
+        user_id: '',
+        party_id: '',
+        lga_id: '',
+        ward_id: '',
+        pu_id: '',
+        vote_count: ''
       },
       ruleInline: {
-        user: [{
+        user_id: [{
           required: true,
-          message: 'Please fill in the user name',
+          message: 'Please fill in the user ID',
           trigger: 'blur'
         }],
-        password: [{
+        party_id: [{
           required: true,
-          message: 'Please fill in the password.',
+          message: 'Please fill in the party ID',
           trigger: 'blur'
-        }, {
-          type: 'string',
-          min: 6,
-          message: 'The password length cannot be less than 6 bits',
+        }],
+        lg_id: [{
+          required: true,
+          message: 'Please fill in the lg ID',
+          trigger: 'blur'
+        }],
+        ward_id: [{
+          required: true,
+          message: 'Please fill in the ward ID',
+          trigger: 'blur'
+        }],
+        pu_id: [{
+          required: true,
+          message: 'Please fill in the pu ID',
+          trigger: 'blur'
+        }],
+        vote_count: [{
+          required: true,
+          message: 'Please fill in the vote count',
           trigger: 'blur'
         }]
-      }
+      },
+      itemId: null,
+      form: this.$inertia.form({
+        user_id: null,
+        party_id: null,
+        lga_id: null,
+        ward_id: null,
+        pu_id: null,
+        vote_count: null
+      })
     };
   },
   methods: {
-    handleSubmit: function handleSubmit(name) {
+    submit: function submit(name) {
       var _this = this;
 
       this.$refs[name].validate(function (valid) {
         if (valid) {
-          _this.$Message.success('Success!');
+          // this.$Message.success('Success!');
+          _this.form.post(route("post.store"), {
+            // preverseScroll: true,
+            onSuccess: function onSuccess() {
+              _this.$refs[name].resetFields();
+
+              _this.resModal = false; // this.form.reset();
+            }
+          });
         } else {
           _this.$Message.error('Fail!');
         }
       });
+    },
+    closeModal: function closeModal(name) {
+      this.$refs[name].resetFields();
+      this.resModal = false;
+    },
+    //Perform save and also update action
+    submitData: function submitData() {
+      var _this2 = this;
+
+      if (this.isUpdate) {
+        this.form.put(route("employee.update", this.itemId), {
+          preverseScroll: true,
+          onSuccess: function onSuccess() {
+            _this2.isLoading = false;
+            _this2.dialog = false;
+            _this2.isUpdate = false;
+            _this2.itemId = null;
+
+            _this2.form.reset();
+          }
+        });
+      } else {
+        this.form.post(route("employee.store"), {
+          preverseScroll: true,
+          onSuccess: function onSuccess() {
+            _this2.isLoading = false;
+            _this2.dialog = false;
+
+            _this2.form.reset();
+          }
+        });
+      }
     }
   }
 });
@@ -22304,19 +22398,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return $data.resModal = true;
         })
       }, _hoisted_11)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" MODAL "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Modal, {
-        title: "Title",
+        title: "Post Result",
         modelValue: $data.resModal,
-        "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+        "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
           return $data.resModal = $event;
         }),
-        closable: false
+        closable: false,
+        "mask-closable": false
       }, {
         footer: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
             type: "default",
             size: "small",
-            onClick: _cache[3] || (_cache[3] = function ($event) {
-              return $data.resModal = false;
+            onClick: _cache[7] || (_cache[7] = function ($event) {
+              return $options.closeModal('form');
             })
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -22327,8 +22422,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
           }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
             type: "primary",
-            onClick: _cache[4] || (_cache[4] = function ($event) {
-              return $options.handleSubmit('formInline');
+            size: "small",
+            onClick: _cache[8] || (_cache[8] = function ($event) {
+              return $options.submit('form');
             })
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -22341,22 +22437,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Form, {
-            ref: "formInline",
-            model: $data.formInline,
+            ref: "form",
+            model: $data.form,
             rules: $data.ruleInline
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
-                prop: "user"
+                prop: "user_id"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                   return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-                    type: "text",
-                    modelValue: $data.formInline.user,
+                    type: "number",
+                    modelValue: $data.form.user_id,
                     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
-                      return $data.formInline.user = $event;
+                      return $data.form.user_id = $event;
                     }),
-                    placeholder: "Username"
+                    placeholder: "user id"
                   }, null, 8
                   /* PROPS */
                   , ["modelValue"])];
@@ -22365,16 +22461,88 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 /* STABLE */
 
               }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
-                prop: "password"
+                prop: "party_id"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                   return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-                    type: "password",
-                    modelValue: $data.formInline.password,
+                    type: "number",
+                    modelValue: $data.form.party_id,
                     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-                      return $data.formInline.password = $event;
+                      return $data.form.party_id = $event;
                     }),
-                    placeholder: "Password"
+                    placeholder: "party id"
+                  }, null, 8
+                  /* PROPS */
+                  , ["modelValue"])];
+                }),
+                _: 1
+                /* STABLE */
+
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+                prop: "lga_id"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+                    type: "number",
+                    modelValue: $data.form.lga_id,
+                    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+                      return $data.form.lga_id = $event;
+                    }),
+                    placeholder: "lg id"
+                  }, null, 8
+                  /* PROPS */
+                  , ["modelValue"])];
+                }),
+                _: 1
+                /* STABLE */
+
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+                prop: "ward_id"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+                    type: "number",
+                    modelValue: $data.form.ward_id,
+                    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+                      return $data.form.ward_id = $event;
+                    }),
+                    placeholder: "ward id"
+                  }, null, 8
+                  /* PROPS */
+                  , ["modelValue"])];
+                }),
+                _: 1
+                /* STABLE */
+
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+                prop: "pu_id"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+                    type: "text",
+                    modelValue: $data.form.pu_id,
+                    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+                      return $data.form.pu_id = $event;
+                    }),
+                    placeholder: "pu id"
+                  }, null, 8
+                  /* PROPS */
+                  , ["modelValue"])];
+                }),
+                _: 1
+                /* STABLE */
+
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+                prop: "vote_count"
+              }, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+                    type: "number",
+                    modelValue: $data.form.vote_count,
+                    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+                      return $data.form.vote_count = $event;
+                    }),
+                    placeholder: "vote count"
                   }, null, 8
                   /* PROPS */
                   , ["modelValue"])];
