@@ -2,65 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Result;
-use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
-    //
-    public function store(Request $request){
-        // elf::where('email', $email)->where('password', $password)->first();
-        $checkResult = Result::all();
-        // $checkResult = Result::where([
-        //         ['lga_id','=',$request->lga_id],
-        //         ['ward_id','=', $request->ward_id],
-        //         ['pu_id','=', $request->pu_id],
-        //         ['party_id','=', $request->party_id]
-        //     ])->first();
+    public function store(PostRequest $request)
+    {
+        $checkResult = Result::where('user_id', auth()->user()->id)
+            ->where('party_id', $request->party_id)
+            ->where('lga_id', $request->lga_id)
+            ->where('lga_id', $request->lga_id)
+            ->where('ward_id', $request->ward_id)
+            ->where('pu_id', $request->pu_id)
+            ->get()
+            ->toArray();
 
-        // $checkResult = Result::where([
-        //     'lga_id'=>$request->lga_id,
-        //     'ward_id'=>$request->ward_id,
-        //     'pu_id'=>$request->pu_id,
-        //     'party_id'=>$request->party_id
-        //     ])->first();
-        // $filter['email']=$email;
-        // $filter['password']=$password;
-        // $userRecord = $this->where($filter)->first();
-        if ($checkResult != null) {
-            $data = $this->validate($request, [
-                'user_id' => 'required|numeric',
-                'party_id' => 'required|numeric',
-                'lga_id' => 'required|numeric',
-                'ward_id' => 'required|numeric',
-                'pu_id' => 'required|numeric',
-                'vote_count' => 'required|numeric',
-            ]);
-            Result::create($data);
-            return redirect()->back()->with('message', [
-                'type' => 'success',
-                'text' => 'Result was posted successful!'.$checkResult,
-            ]);
+        if (count($checkResult) !== 0) {
+            return redirect()
+                ->back()
+                ->with('message', [
+                    'type' => 'error',
+                    'text' =>
+                        'Result was posted already! ' .
+                        $checkResult[0]['vote_count'] .
+                        ' were posted',
+                ]);
         }
-        else{
-            return redirect()->back()->with('message', [
-                'type' => 'error',
-                'text' => 'Result was posted Already!',
-            ]);
-        }
-        // $data = $this->validate($request, [
-        //     'user_id' => 'required|numeric',
-        //     'party_id' => 'required|numeric',
-        //     'lga_id' => 'required|numeric',
-        //     'ward_id' => 'required|numeric',
-        //     'pu_id' => 'required|numeric',
-        //     'vote_count' => 'required|numeric',
-        // ]);
-        // Result::create($data);
-        // return redirect()->back()->with('message', [
-        //     'type' => 'success',
-        //     'text' => 'Result was posted successful!',
-        // ]);
 
+        $data = [
+            'user_id' => auth()->user()->id,
+            'party_id' => $request->party_id,
+            'lga_id' => $request->lga_id,
+            'ward_id' => $request->ward_id,
+            'pu_id' => $request->pu_id,
+            'vote_count' => $request->vote_count,
+        ];
+
+        try {
+            if ($request->validated()) {
+                Result::create($data);
+                return redirect()
+                    ->back()
+                    ->with('message', [
+                        'type' => 'success',
+                        'text' =>
+                            'Result was posted successful! ' .
+                            $request->vote_count .
+                            ' were posted',
+                    ]);
+            }
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('message', [
+                    'type' => 'error',
+                    'text' => 'Something went wrong.',
+                ]);
+        }
     }
 }
