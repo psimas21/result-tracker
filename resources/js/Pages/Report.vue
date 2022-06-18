@@ -61,10 +61,10 @@
 export default {
 	mounted() {
 		this.realTimeResult()
-		window.Echo.channel('notify').listen('PushResult', (msg) => {
-				// Alert then refresh result
-				this.$Notice.success({title: 'Coming Soon'})
-			})
+		// window.Echo.channel('notify').listen('PushResult', (msg) => {
+		// 		// Alert then refresh result
+		// 		this.$Notice.success({title: 'Coming Soon'})
+		// 	})
 	},
 	data() {
 		return {
