@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PushResult;
 use App\Http\Requests\PostRequest;
+use App\Models\Party;
 use App\Models\Result;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class ResultController extends Controller
 {
+    public function index(){
+        $data = Party::all();
+        return Inertia::render('Post',[
+            'partyData' => $data
+        ]);
+    }
+
     public function store(PostRequest $request)
     {
-        $checkResult = Result::where('user_id', auth()->user()->id)
+        // $checkResult = Result::where('user_id', auth()->user()->id)
+        $checkResult = Result::where('user_id', $request->user_id)
             ->where('party_id', $request->party_id)
-            ->where('lga_id', $request->lga_id)
             ->where('lga_id', $request->lga_id)
             ->where('ward_id', $request->ward_id)
             ->where('pu_id', $request->pu_id)
@@ -23,33 +34,33 @@ class ResultController extends Controller
                 ->back()
                 ->with('message', [
                     'type' => 'error',
-                    'text' =>
-                        'Result was posted already! ' .
-                        $checkResult[0]['vote_count'] .
-                        ' were posted',
+                    'text' =>'Result was posted already! '
                 ]);
         }
 
         $data = [
-            'user_id' => auth()->user()->id,
+            // 'user_id' => auth()->user()->id,
+            'user_id' => $request->user_id,
             'party_id' => $request->party_id,
             'lga_id' => $request->lga_id,
             'ward_id' => $request->ward_id,
             'pu_id' => $request->pu_id,
             'vote_count' => $request->vote_count,
         ];
+        $pushArray = [
+            'party_id' => $request->party_id,
+            'votes' => $request->vote_count
+        ];
 
         try {
             if ($request->validated()) {
                 Result::create($data);
+                PushResult::dispatch($pushArray);
                 return redirect()
                     ->back()
                     ->with('message', [
                         'type' => 'success',
-                        'text' =>
-                            'Result was posted successful! ' .
-                            $request->vote_count .
-                            ' were posted',
+                        'text' =>'Result was posted successful! '
                     ]);
             }
         } catch (\Exception $e) {
@@ -60,5 +71,14 @@ class ResultController extends Controller
                     'text' => 'Something went wrong.',
                 ]);
         }
+    }
+    public function getResult(){
+       return Result::with('party')->select([DB::raw("party_id"), DB::raw("SUM(vote_count) as votes")])
+                ->groupBy('party_id')
+                ->get()
+                ->toArray();
+    }
+    public function testParty(){
+        return Party::all();
     }
 }

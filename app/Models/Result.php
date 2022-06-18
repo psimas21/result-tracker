@@ -19,4 +19,10 @@ class Result extends Model
         'pu_id',
         'vote_count',
     ];
+
+    public function party()
+    {
+        return $this->belongsTo(Party::class);
+    }
+
 }

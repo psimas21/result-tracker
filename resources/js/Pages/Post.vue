@@ -50,17 +50,15 @@
                     ></Input>
                   </FormItem>
                   <FormItem prop="party_id">
-                    <Input
-                      type="number"
-                      v-model="form.party_id"
-                      placeholder="party id"
-                    ></Input>
+                  <Select v-model="form.party_id" placeholder="Select Party">
+                      <Option v-for="row in partyData" :key="row.id" value="row.party_id">{{row.party_name}}</Option>
+                  </Select>
                   </FormItem>
                   <FormItem prop="lga_id">
                     <Input
                       type="number"
                       v-model="form.lga_id"
-                      placeholder="lg id"
+                      placeholder="lga id"
                     ></Input>
                   </FormItem>
                   <FormItem prop="ward_id">
@@ -221,6 +219,7 @@
 <script>
 import Layout from './Layout.vue'
 export default {
+  props:['partyData'],
   components: { Layout },
   data() {
     return {
@@ -258,10 +257,10 @@ export default {
             trigger: 'blur',
           },
         ],
-        lg_id: [
+        lga_id: [
           {
             required: true,
-            message: 'Please fill in the lg ID',
+            message: 'Please fill in the lga ID',
             trigger: 'blur',
           },
         ],

@@ -29,14 +29,13 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/post', function () {
-    return Inertia::render('Post');
-})->name('post');
-
 Route::get('/report', function () {
     return Inertia::render('Report');
-})->name('report');
+});
 
-Route::resource('post', ResultController::class)->only(['store']);
+
+Route::resource('/post', ResultController::class)->only(['index', 'store']);
+Route::get('/resultapi', [ResultController::class, 'getResult']);
+Route::get('/partyapi', [ResultController::class, 'testParty']);
 
 require __DIR__.'/auth.php';
