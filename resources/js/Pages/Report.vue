@@ -93,6 +93,7 @@ export default {
 		realTimeResult(){
 			window.Echo.channel('notify').listen('PushResult', (msg) => {
 				this.fetchResult()
+				this.$Notice.success({title: 'Coming Soon'});
 			})
 		}
 	},
