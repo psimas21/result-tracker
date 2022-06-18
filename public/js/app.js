@@ -20713,6 +20713,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       window.Echo.channel('notify').listen('PushResult', function (msg) {
+        // Alert then refresh result
+        _this2.$Notice.success({
+          title: 'Coming Soon'
+        });
+
         _this2.fetchResult();
       });
     }

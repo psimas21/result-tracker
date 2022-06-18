@@ -92,13 +92,15 @@ export default {
 		},
 		realTimeResult(){
 			window.Echo.channel('notify').listen('PushResult', (msg) => {
+				// Alert then refresh result
+				this.$Notice.success({title: 'Coming Soon'})
 				this.fetchResult()
-				this.$Notice.success({title: 'Coming Soon'});
 			})
 		}
 	},
 	created() {
 		this.fetchResult()
+
 	},
 }
 </script>
