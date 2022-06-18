@@ -73,6 +73,7 @@ export default {
 
 			// RESULT ARRAY
 			result: [],
+			popUpData:[],
 			// END RESULT ARRAY
 
 			// result: [
@@ -88,10 +89,12 @@ export default {
 		fetchResult(){
 			axios.get('/resultapi').then(response => {
 				this.result = response.data;
+				this.$Notice.success({title: 'Coming Soon'})
 			})
 		},
 		realTimeResult(){
 			window.Echo.channel('notify').listen('PushResult', (msg) => {
+				this.popUpData = msg
 				this.fetchResult()
 			})
 		}

@@ -20691,6 +20691,7 @@ __webpack_require__.r(__webpack_exports__);
       // ],
       // RESULT ARRAY
       result: [],
+      popUpData: [],
       // END RESULT ARRAY
       // result: [
       // 	{ party_name: 'APC', number_of_vote: 1309, p_id: 2 },
@@ -20707,12 +20708,18 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/resultapi').then(function (response) {
         _this.result = response.data;
+
+        _this.$Notice.success({
+          title: 'Coming Soon'
+        });
       });
     },
     realTimeResult: function realTimeResult() {
       var _this2 = this;
 
       window.Echo.channel('notify').listen('PushResult', function (msg) {
+        _this2.popUpData = msg;
+
         _this2.fetchResult();
       });
     }
