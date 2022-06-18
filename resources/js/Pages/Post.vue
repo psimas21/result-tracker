@@ -34,7 +34,7 @@
                   <strong>Result</strong>
                 </button>
               </div>
-              <!-- MODAL -->
+              <!-- POST RESULT MODAL -->
               <Modal
                 title="Post Result"
                 v-model="resModal"
@@ -51,7 +51,7 @@
                   </FormItem>
                   <FormItem prop="party_id">
                   <Select v-model="form.party_id" placeholder="Select Party">
-                      <Option v-for="row in partyData" :key="row.id" value="row.id">{{row.party_name}}</Option>
+                      <Option v-for="row in partyData" :key="row.id" :value="row.id">{{row.party_name}}</Option>
                   </Select>
                   </FormItem>
                   <FormItem prop="lga_id">

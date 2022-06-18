@@ -22509,7 +22509,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.partyData, function (row) {
                         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Option, {
                           key: row.id,
-                          value: "row.id"
+                          value: row.id
                         }, {
                           "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                             return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.party_name), 1
@@ -22519,9 +22519,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                           _: 2
                           /* DYNAMIC */
 
-                        }, 1024
-                        /* DYNAMIC_SLOTS */
-                        );
+                        }, 1032
+                        /* PROPS, DYNAMIC_SLOTS */
+                        , ["value"]);
                       }), 128
                       /* KEYED_FRAGMENT */
                       ))];
