@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\LGA;
+use App\Models\Lga;
 use App\Models\Party;
 use App\Models\User;
 use App\Models\Ward;

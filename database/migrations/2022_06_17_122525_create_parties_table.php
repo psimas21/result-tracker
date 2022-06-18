@@ -15,13 +15,9 @@ class CreatePartiesTable extends Migration
     {
         Schema::create('parties', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedBigInteger('result_id');
             $table->string('party_name');
             $table->timestamps();
         });
-        // Schema::table('results', function (Blueprint $table){
-        //     $table->foreign('result_id')->references('id')->on('results');
-        // });
     }
 
     /**
