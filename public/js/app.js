@@ -20679,7 +20679,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
+    var _this = this;
+
     this.realTimeResult();
+    window.Echo.channel('notify').listen('PushResult', function (msg) {
+      // Alert then refresh result
+      _this.$Notice.success({
+        title: 'Coming Soon'
+      });
+    });
   },
   data: function data() {
     return {
@@ -20703,22 +20711,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     fetchResult: function fetchResult() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('/resultapi').then(function (response) {
-        _this.result = response.data;
+        _this2.result = response.data;
       });
     },
     realTimeResult: function realTimeResult() {
-      var _this2 = this;
+      var _this3 = this;
 
       window.Echo.channel('notify').listen('PushResult', function (msg) {
-        // Alert then refresh result
-        _this2.$Notice.success({
-          title: 'Coming Soon'
-        });
-
-        _this2.fetchResult();
+        _this3.fetchResult();
       });
     }
   },
