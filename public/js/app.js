@@ -20679,10 +20679,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
-    this.realTimeResult(); // window.Echo.channel('notify').listen('PushResult', (msg) => {
-    // 		// Alert then refresh result
-    // 		this.$Notice.success({title: 'Coming Soon'})
-    // 	})
+    this.realTimeResult();
   },
   data: function data() {
     return {
