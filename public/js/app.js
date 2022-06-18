@@ -22411,10 +22411,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_FormItem = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FormItem");
 
-  var _component_Option = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Option");
-
-  var _component_Select = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Select");
-
   var _component_Form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Form");
 
   var _component_Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Button");
@@ -22498,45 +22494,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 prop: "party_id"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
+                    type: "number",
                     modelValue: $data.form.party_id,
                     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
                       return $data.form.party_id = $event;
                     }),
-                    placeholder: "Select Party"
-                  }, {
-                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                      return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.partyData, function (row, i) {
-                        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Option, {
-                          key: i,
-                          value: row.id
-                        }, {
-                          "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                            return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.party_name), 1
-                            /* TEXT */
-                            )];
-                          }),
-                          _: 2
-                          /* DYNAMIC */
-
-                        }, 1032
-                        /* PROPS, DYNAMIC_SLOTS */
-                        , ["value"]);
-                      }), 128
-                      /* KEYED_FRAGMENT */
-                      ))];
-                    }),
-                    _: 1
-                    /* STABLE */
-
-                  }, 8
+                    placeholder: "party id"
+                  }, null, 8
                   /* PROPS */
                   , ["modelValue"])];
                 }),
                 _: 1
                 /* STABLE */
 
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <FormItem prop=\"party_id\">\n                  <Select v-model=\"form.party_id\" placeholder=\"Select Party\">\n                      <Option v-for=\"(row, i) in partyData\" :key=\"i\" v-bind:value=\"row.id\">{{row.party_name}}</Option>\n                  </Select>\n                  </FormItem> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
                 prop: "lga_id"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
