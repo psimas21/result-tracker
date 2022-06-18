@@ -50,10 +50,17 @@
                     ></Input>
                   </FormItem>
                   <FormItem prop="party_id">
+                    <Input
+                      type="number"
+                      v-model="form.party_id"
+                      placeholder="party id"
+                    ></Input>
+                  </FormItem>
+                  <!-- <FormItem prop="party_id">
                   <Select v-model="form.party_id" placeholder="Select Party">
                       <Option v-for="(row, i) in partyData" :key="i" v-bind:value="row.id">{{row.party_name}}</Option>
                   </Select>
-                  </FormItem>
+                  </FormItem> -->
                   <FormItem prop="lga_id">
                     <Input
                       type="number"
