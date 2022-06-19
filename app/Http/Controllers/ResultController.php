@@ -47,15 +47,11 @@ class ResultController extends Controller
             'pu_id' => $request->pu_id,
             'vote_count' => $request->vote_count,
         ];
-        $pushArray = [
-            'party_id' => $request->party_id,
-            'votes' => $request->vote_count
-        ];
 
         try {
             if ($request->validated()) {
                 Result::create($data);
-                PushResult::dispatch($pushArray);
+                PushResult::dispatch($data);
                 return redirect()
                     ->back()
                     ->with('message', [

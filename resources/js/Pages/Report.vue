@@ -19,14 +19,14 @@
 						<div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
 							<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5">
 								<table class="min-w-full divide-y divide-gray-300">
-									<thead class="bg-gray-50">
+									<!-- <thead class="bg-gray-50">
 										<tr>
 											<th scope="col" class="py-3 pl-4 pr-3 text-left text-2xl font-medium uppercase tracking-wide text-gray-500 sm:pl-6">
 												Party</th>
 											<th scope="col" class="px-3 py-3 text-left text-2xl font-medium uppercase tracking-wide text-gray-500">
 												Votes</th>
 										</tr>
-									</thead>
+									</thead> -->
 									<tbody class="divide-y divide-gray-200 bg-white">
 										<tr v-for="row in result" :key="row.party_id">
 											<td class="whitespace-nowrap py-4 pl-4 pr-3 text-7xl font-medium text-gray-900 sm:pl-6">{{ row.party.party_name }}</td>
@@ -73,29 +73,25 @@ export default {
 
 			// RESULT ARRAY
 			result: [],
-			popUpData:[],
 			// END RESULT ARRAY
-
-			// result: [
-			// 	{ party_name: 'APC', number_of_vote: 1309, p_id: 2 },
-			// 	{ party_name: 'NNPP', number_of_vote: 2301, p_id: 1 },
-			// 	{ party_name: 'LABOUR PARTY', number_of_vote: 509, p_id: 3 },
-			// 	{ party_name: 'PDP', number_of_vote: 4000, p_id: 1 },
-			// ],
-			election: 'ADAMAWA STATE GUBERNATORIAL',
+			election: 'GOMBE STATE GUBERNATORIAL',
 		}
 	},
 	methods: {
 		fetchResult(){
 			axios.get('/resultapi').then(response => {
 				this.result = response.data;
-				this.$Notice.success({title: 'Coming Soon'})
+			})
+		},
+		realTimeRefresh(e){
+			axios.get('/resultapi').then(response => {
+				this.result = response.data;
+				this.$Notice.success({title: 'Result Updated'})
 			})
 		},
 		realTimeResult(){
 			window.Echo.channel('notify').listen('PushResult', (msg) => {
-				this.popUpData = msg
-				this.fetchResult()
+				this.realTimeRefresh(msg)
 			})
 		}
 	},

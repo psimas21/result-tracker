@@ -49,18 +49,18 @@
                       placeholder="user id"
                     ></Input>
                   </FormItem>
-                  <FormItem prop="party_id">
+                  <!-- <FormItem prop="party_id">
                     <Input
                       type="number"
                       v-model="form.party_id"
                       placeholder="party id"
                     ></Input>
-                  </FormItem>
-                  <!-- <FormItem prop="party_id">
-                  <Select v-model="form.party_id" placeholder="Select Party">
-                      <Option v-for="(row, i) in partyData" :key="i" v-bind:value="row.id">{{row.party_name}}</Option>
-                  </Select>
                   </FormItem> -->
+                  <FormItem prop="party_id">
+                    <Select v-model="form.party_id" placeholder="Select Party">
+                        <Option v-for="(row, i) in fetchParty" :key="i" v-bind:value="row.id">{{row.party_name}}</Option>
+                    </Select>
+                  </FormItem>
                   <FormItem prop="lga_id">
                     <Input
                       type="number"
@@ -231,6 +231,7 @@ export default {
   data() {
     return {
       result: 1,
+      fetchParty: this.partyData,
       resModal: false,
       people: [
         {
@@ -260,6 +261,7 @@ export default {
         party_id: [
           {
             required: true,
+            type: 'number',
             message: 'Please fill in the party ID',
             trigger: 'blur',
           },

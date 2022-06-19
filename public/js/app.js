@@ -20550,6 +20550,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       result: 1,
+      fetchParty: this.partyData,
       resModal: false,
       people: [{
         name: 'Lindsay Walton',
@@ -20574,6 +20575,7 @@ __webpack_require__.r(__webpack_exports__);
         }],
         party_id: [{
           required: true,
+          type: 'number',
           message: 'Please fill in the party ID',
           trigger: 'blur'
         }],
@@ -20691,15 +20693,8 @@ __webpack_require__.r(__webpack_exports__);
       // ],
       // RESULT ARRAY
       result: [],
-      popUpData: [],
       // END RESULT ARRAY
-      // result: [
-      // 	{ party_name: 'APC', number_of_vote: 1309, p_id: 2 },
-      // 	{ party_name: 'NNPP', number_of_vote: 2301, p_id: 1 },
-      // 	{ party_name: 'LABOUR PARTY', number_of_vote: 509, p_id: 3 },
-      // 	{ party_name: 'PDP', number_of_vote: 4000, p_id: 1 },
-      // ],
-      election: 'ADAMAWA STATE GUBERNATORIAL'
+      election: 'GOMBE STATE GUBERNATORIAL'
     };
   },
   methods: {
@@ -20708,19 +20703,24 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/resultapi').then(function (response) {
         _this.result = response.data;
+      });
+    },
+    realTimeRefresh: function realTimeRefresh(e) {
+      var _this2 = this;
 
-        _this.$Notice.success({
-          title: 'Coming Soon'
+      axios.get('/resultapi').then(function (response) {
+        _this2.result = response.data;
+
+        _this2.$Notice.success({
+          title: 'Result Updated'
         });
       });
     },
     realTimeResult: function realTimeResult() {
-      var _this2 = this;
+      var _this3 = this;
 
       window.Echo.channel('notify').listen('PushResult', function (msg) {
-        _this2.popUpData = msg;
-
-        _this2.fetchResult();
+        _this3.realTimeRefresh(msg);
       });
     }
   },
@@ -22418,6 +22418,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_FormItem = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FormItem");
 
+  var _component_Option = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Option");
+
+  var _component_Select = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Select");
+
   var _component_Form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Form");
 
   var _component_Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Button");
@@ -22497,25 +22501,49 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 _: 1
                 /* STABLE */
 
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <FormItem prop=\"party_id\">\n                    <Input\n                      type=\"number\"\n                      v-model=\"form.party_id\"\n                      placeholder=\"party id\"\n                    ></Input>\n                  </FormItem> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
                 prop: "party_id"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Input, {
-                    type: "number",
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select, {
                     modelValue: $data.form.party_id,
                     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
                       return $data.form.party_id = $event;
                     }),
-                    placeholder: "party id"
-                  }, null, 8
+                    placeholder: "Select Party"
+                  }, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                      return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.fetchParty, function (row, i) {
+                        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Option, {
+                          key: i,
+                          value: row.id
+                        }, {
+                          "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                            return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.party_name), 1
+                            /* TEXT */
+                            )];
+                          }),
+                          _: 2
+                          /* DYNAMIC */
+
+                        }, 1032
+                        /* PROPS, DYNAMIC_SLOTS */
+                        , ["value"]);
+                      }), 128
+                      /* KEYED_FRAGMENT */
+                      ))];
+                    }),
+                    _: 1
+                    /* STABLE */
+
+                  }, 8
                   /* PROPS */
                   , ["modelValue"])];
                 }),
                 _: 1
                 /* STABLE */
 
-              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <FormItem prop=\"party_id\">\n                  <Select v-model=\"form.party_id\" placeholder=\"Select Party\">\n                      <Option v-for=\"(row, i) in partyData\" :key=\"i\" v-bind:value=\"row.id\">{{row.party_name}}</Option>\n                  </Select>\n                  </FormItem> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FormItem, {
                 prop: "lga_id"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -22689,37 +22717,24 @@ var _hoisted_11 = {
 var _hoisted_12 = {
   "class": "min-w-full divide-y divide-gray-300"
 };
-
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", {
-  "class": "bg-gray-50"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
-  scope: "col",
-  "class": "py-3 pl-4 pr-3 text-left text-2xl font-medium uppercase tracking-wide text-gray-500 sm:pl-6"
-}, " Party"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
-  scope: "col",
-  "class": "px-3 py-3 text-left text-2xl font-medium uppercase tracking-wide text-gray-500"
-}, " Votes")])], -1
-/* HOISTED */
-);
-
-var _hoisted_14 = {
+var _hoisted_13 = {
   "class": "divide-y divide-gray-200 bg-white"
 };
-var _hoisted_15 = {
+var _hoisted_14 = {
   "class": "whitespace-nowrap py-4 pl-4 pr-3 text-7xl font-medium text-gray-900 sm:pl-6"
 };
-var _hoisted_16 = {
+var _hoisted_15 = {
   "class": "whitespace-nowrap px-3 py-4 text-7xl text-gray-500"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.election), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Display the election currently viewing "), _hoisted_4, _hoisted_5])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"sm:flex sm:items-center\">\n\t\t\t\t\t<div class=\"sm:flex-auto\">\n\t\t\t\t\t\t<h1 class=\"text-xl font-semibold text-gray-900\">Realtime Result</h1>\n\t\t\t\t\t</div>\n\t\t\t\t</div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_14, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.result, function (row) {
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Display the election currently viewing "), _hoisted_4, _hoisted_5])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"sm:flex sm:items-center\">\n\t\t\t\t\t<div class=\"sm:flex-auto\">\n\t\t\t\t\t\t<h1 class=\"text-xl font-semibold text-gray-900\">Realtime Result</h1>\n\t\t\t\t\t</div>\n\t\t\t\t</div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <thead class=\"bg-gray-50\">\n\t\t\t\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"py-3 pl-4 pr-3 text-left text-2xl font-medium uppercase tracking-wide text-gray-500 sm:pl-6\">\n\t\t\t\t\t\t\t\t\t\t\t\tParty</th>\n\t\t\t\t\t\t\t\t\t\t\t<th scope=\"col\" class=\"px-3 py-3 text-left text-2xl font-medium uppercase tracking-wide text-gray-500\">\n\t\t\t\t\t\t\t\t\t\t\t\tVotes</th>\n\t\t\t\t\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t\t\t\t</thead> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_13, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.result, function (row) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: row.party_id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.party.party_name), 1
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.party.party_name), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.votes), 1
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(row.votes), 1
     /* TEXT */
     )]);
   }), 128
