@@ -32,7 +32,7 @@ Route::get('/dashboard', function () {
 Route::get('/report', function () {
     return Inertia::render('Report');
 });
-
+// Route::inertia('/post', 'Post');
 
 Route::resource('/post', ResultController::class)->only(['index', 'store']);
 Route::get('/resultapi', [ResultController::class, 'getResult']);
