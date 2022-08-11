@@ -2,7 +2,7 @@ require('./bootstrap');
 
 import { createApp, h } from 'vue';
 import ViewUIPlus from 'view-ui-plus'
-import { createInertiaApp } from '@inertiajs/inertia-vue3';
+import { createInertiaApp, Head, Link } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import 'view-ui-plus/dist/styles/viewuiplus.css'
 
@@ -15,6 +15,8 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(ViewUIPlus)
+            .component('InertiaHead', Head)
+            .component('InertiaLink', Link)
             .mixin({ methods: { route } })
             .mount(el);
     },
