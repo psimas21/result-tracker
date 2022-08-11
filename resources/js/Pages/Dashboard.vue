@@ -19,6 +19,9 @@ import { Head } from '@inertiajs/inertia-vue3';
                     <div class="p-6 bg-white border-b border-gray-200">
                         You're logged in!
                     </div>
+                    <Link :href="route('report')" :active="route().current('report')">
+                            Report
+                    </Link>
                 </div>
             </div>
         </div>
